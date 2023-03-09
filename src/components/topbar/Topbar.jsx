@@ -79,7 +79,7 @@ const Topbar = () => {
     };
     console.log(name);
     try {
-      await axios.post("/users/register", newPerson);
+      await axios.post("https://prs-app-backend.onrender.com/api/users/register", newPerson);
     } catch (err) {
       console.log(err);
     }

@@ -14,7 +14,7 @@ const Item = ({ user }) => {
   const scoreHandler = async (num) => {
     setScore(score+num);
     try {
-      await axios.post("/users/" + user._id, {
+      await axios.post("https://prs-app-backend.onrender.com/api/users/" + user._id, {
         val: num,
       });
     } catch (err) {
