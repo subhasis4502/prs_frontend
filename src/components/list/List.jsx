@@ -2,6 +2,7 @@ import { Grid } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Item from "../item/Item";
+import './list.css';
 
 const List = () => {
 

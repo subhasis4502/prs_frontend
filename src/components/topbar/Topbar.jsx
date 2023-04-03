@@ -1,4 +1,5 @@
 import axios from "axios";
+import "./topbar.css";
 import { styled, alpha } from "@mui/material/styles";
 import {
   AppBar,
@@ -13,6 +14,10 @@ import {
   DialogActions,
   Button,
   TextField,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -62,6 +67,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 const Topbar = () => {
   const name = useRef();
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const handleCategoryChange = (event) => {
+    setSelectedCategory(event.target.value);
+  };
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -75,11 +85,15 @@ const Topbar = () => {
   const handleSubmit = async () => {
     const newPerson = {
       name: name.current.value,
+      category: selectedCategory,
       score: 100,
     };
     console.log(name);
     try {
-      await axios.post("https://prs-app-backend.onrender.com/api/users/register", newPerson);
+      await axios.post(
+        "https://prs-app-backend.onrender.com/api/users/register",
+        newPerson
+      );
     } catch (err) {
       console.log(err);
     }
@@ -87,7 +101,7 @@ const Topbar = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1 }} className="topbar">
       <AppBar position="static">
         <Toolbar>
           {/* <IconButton
@@ -129,6 +143,24 @@ const Topbar = () => {
                 label="Name"
                 variant="outlined"
               />
+              <br />
+              <br />
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel id="category-label">Category</InputLabel>
+                <Select
+                  labelId="category-label"
+                  id="category-select"
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
+                  label="Category"
+                >
+                  <MenuItem value="Family">Family</MenuItem>
+                  <MenuItem value="Relative">Relative</MenuItem>
+                  <MenuItem value="Friend">Friend</MenuItem>
+                  <MenuItem value="Collegue">Collegue</MenuItem>
+                  <MenuItem value="Other">Other</MenuItem>
+                </Select>
+              </FormControl>
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Cancel</Button>
