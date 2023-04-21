@@ -9,7 +9,7 @@ const List = ({ searchTerm }) => {
   const [users, setUsers] = useState([]);
   useEffect(() => {
     const fetchUser = async () => {
-      const newUser = await axios.get("http://localhost:8800/api/users/");
+      const newUser = await axios.get("https://prs-app-backend.onrender.com/api/users/");
       setUsers(newUser.data);
     };
 
