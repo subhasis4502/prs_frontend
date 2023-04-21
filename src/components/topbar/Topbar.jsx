@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -65,9 +65,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const Topbar = () => {
+const Topbar = ({ onSearch }) => {
+  const search = useRef();
   const name = useRef();
+  const desc = useRef();
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleCategoryChange = (event) => {
     setSelectedCategory(event.target.value);
@@ -85,34 +88,32 @@ const Topbar = () => {
   const handleSubmit = async () => {
     const newPerson = {
       name: name.current.value,
+      desc: desc.current.value,
       category: selectedCategory,
       score: 100,
     };
     console.log(name);
     try {
-      await axios.post(
-        "https://prs-app-backend.onrender.com/api/users/register",
-        newPerson
-      );
+      await axios.post("http://localhost:8800/api/users/register", newPerson);
     } catch (err) {
       console.log(err);
     }
     window.location.reload(false);
   };
 
+  const handleSearch = () => {
+    setSearchTerm(search.current.value);
+  };
+
+  useEffect(() => { 
+    console.log(searchTerm);
+    onSearch(searchTerm);
+  }, [searchTerm]);
+
   return (
     <Box sx={{ flexGrow: 1 }} className="topbar">
       <AppBar position="static">
         <Toolbar>
-          {/* <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton> */}
           <Typography
             variant="h6"
             noWrap
@@ -127,6 +128,8 @@ const Topbar = () => {
             </SearchIconWrapper>
             <StyledInputBase
               placeholder="Search…"
+              inputRef={search}
+              onChange={handleSearch}
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
@@ -141,6 +144,14 @@ const Topbar = () => {
                 id="outlined-basic"
                 inputRef={name}
                 label="Name"
+                variant="outlined"
+              />
+              <br />
+              <br />
+              <TextField
+                id="outlined-basic"
+                inputRef={desc}
+                label="Desciption"
                 variant="outlined"
               />
               <br />
